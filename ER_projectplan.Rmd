@@ -1,0 +1,29 @@
+---
+title: "EEB 697 Project Plan"
+author: "Eden Ravecca"
+date: "1/20/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# EEB 697 Movement Ecology
+# Research Project Plan outline
+
+__*Team*__: I will be working on my own questions for this project.
+
+__*Research Question*__: I am interested in resource selection analysis and modeling how different land cover types influence foraging behaviors in Prairie Falcons.
+
+__*Relevant Ecological Theory*__: I will be focusing mainly on Habitat Selection Theory for the research project. Habitat selection theory describes how an individual animal's interactions with the environment help shape a wide variety of ecological processes and patterns, including trophic dynamics.
+
+__*Scale*__: The spatial scale for this project is micro-level, consisting of a small portion of the species overall range. The temporal scale will cover a portion of the breeding season. (1 to 9 weeks)
+Available data: Telemetry gps data from nine individual Prairie Falcons. Movement data may be the entire set of recorded gps locations while occupying breeding territory or possibly be divided into weeks. The most recent annual land cover raster data will be obtained from the NLCD database.
+
+__*Brief Summary*__: During foraging events, breeding Prairie Falcons use a proportion of the available habitat within their home range to find food for themselves, their mate and their young. Daily falcon movements, or movement phases, capture more than just foraging events. Foraging movement will be isolated from commuting (travel), resting, feeding, patrolling, and conspecific interactions, and defined as the movement step (foraging) containing only the movements associated with hunting and capturing prey.
+
+To divide movement phases accordingly and identify foraging events, I will look at turning angles and velocity. The extent of all foraging events will define the individual falcon’s foraging area (within the available habitat found in their breeding home ranges). Breeding Prairie Falcons typically roost near their nest site and often return to the nest site throughout the day. This behavior allows us to identify the territories of each individual. Movements that occur within a biologically reasonable buffer to the nest site can be assumed to be associated with patrolling or conspecific interactions, given that Prairie Falcons are only territorial near their nests. These movements are not associated with foraging and can be disregarded. Repeated gps fixes in a single or a few close locations would represent feeding and or resting and, for the purpose of this project, would not be associated with foraging (although Prairie Falcons can and do perch hunt). The remaining movements can be assumed to be associated with either foraging or commuting. To differentiate between the two, I will look at the frequency and regularity of turn angles and velocities. Turning angles and velocity should be consistent and regular during commuting. When a falcon has initiated foraging, the turning angles and velocity should be irregular.
+
+Once the foraging behavior (movement step) is identified, I will then view histograms of the step lengths, and use the distribution of those data to simulate locations of "available habitat" in a defined foraging area. The simulated points will be representative of the distances traveled during observed foraging step lengths. With the observed data, and simulated points representing the available habitat, I will use resource selection functions to assess the strength of selection for three types of land cover: native shrub, native grasses or perennials, and annual grasses (assumed to be invasive cheatgrass). 
+
+To prepare for analyses, the falcon data will need to be imported and cleaned. This involves removing inaccurate gps fixes or points with no spatial location and later removing temporal autocorrelation to satisfy the assumption that each point is independent. NLCD raster data will be imported and cropped to the NCA boundary (plus a buffer of 10,000 meters to account for foraging events that occur just outside of NCA boundary). The gps data and raster data will need to be in the same CRS and projection. 
