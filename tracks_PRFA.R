@@ -1,10 +1,4 @@
 
-
-
-############################# CREATING TRACKS ##################################
-#.......................  For HR using AMT package  ............................
-
-
 #..................................................................#
 # Script developed by Jen Cruz to calculate home ranges            # 
 # We rely on amt vignette here:                                    #
