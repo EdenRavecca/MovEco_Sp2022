@@ -1,15 +1,14 @@
 
-#..................................................................#
-# Script developed by Jen Cruz to calculate home ranges            # 
-# We rely on amt vignette here:                                    #
-# https://cran.r-project.org/web/packages/amt/vignettes/p2_hr.html #
-# as well as: Signer & Fieberg (2021) PeerJ9:e11031                #
-# http://doi.org/10.7717/peerj.11031                               #
-#..................................................................#
+#..............................................................................#
+#   Script developed by Jen Cruz to calculate home ranges                      # 
+#   We rely on amt vignette here:                                              #
+#   https://cran.r-project.org/web/packages/amt/vignettes/p2_hr.html           #
+#   as well as: Signer & Fieberg (2021) PeerJ9:e11031                          #
+#   http://doi.org/10.7717/peerj.11031                                         #
+#..............................................................................#
 
 ########################## DEFINING TRACKS SCRIPT ##############################
 #.......................    For HR Estimation AMT  .............................
-
 
 # load packages relevant to this script:
 
