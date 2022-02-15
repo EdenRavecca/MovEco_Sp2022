@@ -74,9 +74,12 @@ ggplot( datadf, aes( x = speed, group = territory ) ) +
 # Answer:
 
 #............................................................................#
-######   Creating tracks, calculating step lengths and turning angles   ######
+#.....   Creating tracks, calculating step lengths and turning angles   .....#
 #.....             for all individuals at the same time:                .....#
 #............................................................................#
+########################       CREATING TRACKS      ############################
+#.......................    For HR Estimation AMT   ...........................#
+
 
 # amt requires us to turn data into tracks for further analyses.
 
@@ -286,7 +289,8 @@ trks.mig <- trks.all %>% select( territory, migrating ) %>%
 
 head( trks.mig )
 
-########## step lengths and turning angles
+######################     CALCULATING STEP LENGTHS    #########################
+#.....................         To Define Foraging      ........................#
 
 # We can plot step lengths by:
 # trks.steps30 %>% 
@@ -304,7 +308,8 @@ trks.steps %>%
 # What does the plot tell us about the step lengths traveled by the individual?
 # Answer:
 
-# Turning angles:
+#######################     CALCULATING TURN ANGLES    #########################
+#.....................         To Define Foraging      ........................#
 
 trks.steps %>% #filter( id == 1 ) %>% 
   ggplot( .) +
@@ -319,8 +324,8 @@ trks.steps %>% #filter( id == 1 ) %>%
 # Is there any evidence of biased movements for this individual?
 # Answer: The 
 
+########################    SAVING OBJECTS AND DATA    #########################
 #..............................................................................#
-# Saving relevant objects and data
 
 # save breeding season data (not thinned)
 
@@ -347,7 +352,7 @@ write_rds( trks.mig, "trks.mig" )
 save.image( "TracksWorkspace.RData" )
 
 
-###################               END OF SCRIPT       ##########################
+########################         END OF SCRIPT       ###########################
 
 
 
