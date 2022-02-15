@@ -73,13 +73,15 @@ ggplot( datadf, aes( x = speed, group = territory ) ) +
 # Do we need to remove data based on these?
 # Answer:
 
-#............................................................................#
-#.....   Creating tracks, calculating step lengths and turning angles   .....#
-#.....             for all individuals at the same time:                .....#
-#............................................................................#
+#..............................................................................#
+#......                                                                  ......#
+#......   Creating tracks, calculating step lengths and turning angles   ......#
+#......             for all individuals at the same time:                ......#
+#......                                                                  ......#
+#..............................................................................#
+
 ########################       CREATING TRACKS      ############################
 #.......................    For HR Estimation AMT   ...........................#
-
 
 # amt requires us to turn data into tracks for further analyses.
 
