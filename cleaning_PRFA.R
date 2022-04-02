@@ -12,6 +12,7 @@ library( tidyverse ) # easy data manipulation and plotting
 options( dplyr.width = Inf, dplyr.print_min = 100 )
 #library( amt ) # creating tracks from location data
 library(sf)
+library(lubridate)
 
 ##############################  Load PRFA Data  ################################
 #.................... PRFA data Shared Research Drive   ........................
@@ -60,6 +61,7 @@ load_data <- function( path ){
 # apply function to import all files as list of databases:
 
 dataraw <- load_data( paste0(datapath, 'allindvs/') )
+head(dataraw)
 # Note that the files are all in a subdirectory
 
 # Import trapping records with details of when transmitters were deployed
@@ -134,6 +136,7 @@ hist( dataraw$time_to_fix )
 datadf <- dataraw 
 
 colnames( datadf )
+head( datadf )
 
 # Filter to remove inaccurate locations
 
@@ -199,7 +202,8 @@ head( datadf ); dim( datadf )
 
 datadf <- datadf %>% 
   group_by( serial ) %>% 
-  dplyr::filter( jday > StartDay ) %>% ungroup() 
+  dplyr::filter( jday > StartDay ) %>% 
+  ungroup() 
 # why group and ungroup?
 
 # view
@@ -228,6 +232,11 @@ datadf <- datadf %>%
 
 unique(datadf$territory)
 colnames(datadf)
+
+SG <- datadf %>%
+  dplyr::filter(., territory == "SG")
+head(SG)
+range(SG$jday)
 
 #########################   Define CRS/Projection  #############################
 #........................       CTT PRFA data      .............................
