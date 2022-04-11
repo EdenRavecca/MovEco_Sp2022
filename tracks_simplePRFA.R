@@ -185,6 +185,8 @@ trks.fast.breed <- trks.all.med %>% dplyr::select( territory, red ) %>%
   unnest( cols = red ) 
 
 head(trks.fast.breed)
+class(trks.all.med)
+class(trks.fast.breed)
 
 ######################     CALCULATING STEP LENGTHS    #########################
 #.....................         To Define Foraging      ........................#
