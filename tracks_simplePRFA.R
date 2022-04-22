@@ -72,12 +72,18 @@ trks <- datadf %>%
                   #define columns that you want to keep, relabel if you need:
                   id = id, sex = Sex, mth = mth,jday = jday, speed = speed, 
                   alt = alt, territory = territory, 
-                  # assign correct crs
+                  # assign collection crs (data collected in WGS 84)
                   crs = crsdata )
+get_crs(trks) # check crs
 
 # Reproject to UTM to convert lat lon to easting northing:
 
-trks <- amt::transform_coords( trks, crs_to = crstracks )
+trks <- amt::transform_coords( trks, crs_to = crstracks ) 
+
+# crstracks crs assigned from NCA_Shape, 
+# which is in UTM Zone 11N
+
+get_crs(trks) # check crs
 
 # Turn into a tibble list by grouping and nest by individual IDs:
 
@@ -86,6 +92,7 @@ trks <- trks %>%  amt::nest( data = -"territory" )
 # view
 
 trks
+
 
 # Remember we have multiple types of data including detailed data for flights:
 # 3 times a week, 20min fixes during the day, then hourly fixes during migration.
@@ -123,6 +130,7 @@ trks <- trks %>% mutate(
 # view
 
 trks
+trks[["breeding"]]
 
 # Use info to report how many usable points we have during time of each inv @ NCA.
 # Note we created two other groups of tibbles for the breeding season and migrating
@@ -155,13 +163,21 @@ sumtrks[[1]] # sampling rate is seconds between fixes
 
 #   facet_wrap( ~territory, scales = 'free' )
 
-# Add tibbles with added step lengths calculated by bursts from breeding season data:
+# Resample all tracks to 5 second intervals (with 3 second tolerance):
 
-trks.all.med <- trks %>% mutate(
+trks_resamp_5sec <- trks %>% mutate(
   red = map( breeding, function(x) 
     x %>%  track_resample( rate = seconds(5), 
                            tolerance = seconds(3)) %>% 
       steps_by_burst() ) )
+
+view(trks_resamp_5sec[["data"]][5])
+
+# red = resampled breeding tracks. Each burst contains 5-second gps fixes in sequence until 5-sec 
+# interval ends, ending burst. New burst begins at next point where 5-second fixes resume. 
+# All bursts are pieces of a track that only contain 5-sec fix data.
+
+
 
 # steps = step length tibble calculated by bursts..............................?
 

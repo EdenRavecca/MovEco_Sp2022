@@ -247,25 +247,34 @@ range(SG$jday)
 # https://spatialreference.org/ref/epsg/wgs-84/ 
 # epgs = 4326 for this coordinate system
 
-# For amt, crs need to be provided using sp package # why sp package?
+# # For amt, crs need to be provided using sp package # why sp package?
+# 
+# # crsdata <- sp::CRS( "+init=epsg:4326" ) # old script, this line no longer works, deprecated
+# crsdata <- 4326 # sp::CRS( "+init=epsg:4326" ) # updated
+# 
+# # Transform the lat lon to eastings and northings using UTM
+# # http://www.dmap.co.uk/utmworld.htm
+# # zone 11:
+# 
+# # crstracks <- sp::CRS( "+proj=utm +zone=11" )
+# crstracks <- sf::st_crs( NCA_Shape )
+# 
+# # Convert the NCA shapefile to the same projection as GPS data and for the 
+# # tracks that will be created in next script
+# 
+# NCA_Shape <- sf::st_transform( NCA_Shape, crsdata ) # this line doesn't make sense with the previous line
+# # seems not needed
 
-# crsdata <- sp::CRS( "+init=epsg:4326" ) # old script, this line no longer works, deprecated
-crsdata <- 4326 # sp::CRS( "+init=epsg:4326" ) # updated
-
-# Transform the lat lon to eastings and northings using UTM
-# http://www.dmap.co.uk/utmworld.htm
-# zone 11:
-
-# crstracks <- sp::CRS( "+proj=utm +zone=11" )
-crstracks <- sf::st_crs( NCA_Shape )
-
-# Convert the NCA shapefile to the same projection as GPS data and for the 
-# tracks that will be created in next script
-
-NCA_Shape <- sf::st_transform( NCA_Shape, crstracks ) # this line doesn't make sense with the previous line
+crsdata <- 4326 # EPSG = 4326 for WGS84 coordinate system
+crstracks <- sf::st_crs( NCA_Shape ) # NCA_Shape in UTM Zone 11 N, This line assigns UTM Zone 11 N to object crstracks
+# Convert the NCA shapefile to the same projection as GPS data and for the tracks that will be created using amt
+# Why would we do that when ultimately we need everything in UTM, which NCA shape is in already??
+# NCA_Shape <- sf::st_transform( NCA_Shape, crstracks ) # this line doesn't make sense with the previous line
 # seems not needed
+# NCA_Shape is in UTM Zone 11N
+# Raw Data is collected in WGS 84, but not yet assigned
 
-# Next Script: Defining Tracks
+# Next Script: Creating Tracks
 
 save.image( "cleaningPRFA21.RData" )
 
