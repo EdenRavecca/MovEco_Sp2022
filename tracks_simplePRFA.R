@@ -30,6 +30,7 @@ workdir <- getwd()
 
 # load workspace 
 load( "cleaningPRFA21.RData" )
+load( "TracksWorkspace_JEN.RData" )
 load( "TracksWorkspace.RData" )
 
 
@@ -177,40 +178,51 @@ view(trks_resamp_5sec[["data"]][5])
 # interval ends, ending burst. New burst begins at next point where 5-second fixes resume. 
 # All bursts are pieces of a track that only contain 5-sec fix data.
 
+# split tibbles and create new objects for easier viewing: starting with breeding 
+# season data only - which are still tracks not steps by bursts yet
 
-
-# steps = step length tibble calculated by bursts..............................?
+trks_breed <- trks_resamp_5sec %>%
+  # select only the tibbles we want to keep
+  dplyr::select( territory, breeding ) %>%
+  # unnest for easier visualization and processing
+  unnest( cols = breeding )
 
 # view
 
-trks.all.med %>% unnest(red)
+head( trks_breed)
+
+# followed by steps by bursts breeding season data (5-sec gps fixes)
+
+trks_5sec <- trks_resamp_5sec %>% dplyr::select( territory, red ) %>%
+  unnest( cols = red )
 
 # view
 
-head(trks.all.med)
+head(trks_5sec)
 
-# We can now unnest the dataframes of interest
-# Starting with all breeding season data
+# Note that there are columns of interest in trks_breed that were not kept
+# in the steps dataframe. We add those to our trks_5sec for a more complete picture
 
-trks.breed <- trks.all.med %>% dplyr::select( territory, breeding ) %>% 
-  unnest( cols = breeding ) 
+trks_5sec_complete <- trks_breed %>%
+  # select columns of interest
+  dplyr::select( id, territory, sex, mth, jday,
+                 alt, speed, x2_ = x_, y2_ = y_, t2_ = t_  ) %>%
+  # append to steps
+  right_join( trks_5sec, by = c("territory", "x2_", "y2_", "t2_" ) )
 
-head(trks.breed)
+# check
+head( trks_5sec_complete)
+trks_5sec_complete %>% filter( id == 1)
 
-trks.fast.breed <- trks.all.med %>% dplyr::select( territory, red ) %>% 
-  unnest( cols = red ) 
+# steps = two sequential points, output tibble contains all seq steps that match your input criteria,
+# and labels them as a burst each time there are 2+ steps matching your rate (3 seq gps points)
 
-head(trks.fast.breed)
-class(trks.all.med)
-class(trks.fast.breed)
-
-######################     CALCULATING STEP LENGTHS    #########################
+######################          PLOT STEP LENGTHS      #########################
 #.....................         To Define Foraging      ........................#
 
-# We can plot step lengths by:
+# Plot step lengths:
 
-head(trks.fast.breed)
-trks.fast.breed %>%   
+trks_5sec_complete %>%   
   ggplot(.) +
   # geom_density( aes( x = sl_, fill = as.factor(burst_)), alpha = 0.4 ) +
   geom_histogram( aes( x = sl_ ) ) +
@@ -222,17 +234,19 @@ trks.fast.breed %>%
 
 # What is the unit on step length? meters?.....................................?
 
-#######################     CALCULATING TURN ANGLES    #########################
+#######################         PLOT TURN ANGLES       #########################
 #.....................         To Define Foraging      ........................#
 
-trks.fast.breed %>% # filter( id == 1 ) %>% 
+# Plot turning angles:
+
+trks_5sec_complete %>% # filter( id == 1 ) %>% 
   ggplot( .) +
   geom_histogram( aes( x = ta_ ) ) +
   #geom_histogram( aes( x = direction_p ) ) +
   #coord_polar() +
   ylab("Count") + xlab("TA") +
   xlim(-5,5) +
-  scale_x_continuous(breaks = c(-5, -4, -3, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 3, 4, 5)) +
+  scale_x_continuous(breaks = c(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5)) +
   theme_bw( base_size = 19 ) +
   facet_wrap( ~territory, scales = 'free_y' )
 
@@ -245,13 +259,18 @@ trks.fast.breed %>% # filter( id == 1 ) %>%
 ########################    SAVING OBJECTS AND DATA    #########################
 #..............................................................................#
 
-# save breeding season data tracks (not thinned)
+# save breeding season data tracks (breeding, full data, not resampled)
  
-write_rds( trks.breed, "trks.breed")
+write_rds( trks_breed, "trks_breed")
 
 # save breeding season data tracks reduced to 5-second rate
 
-write_rds( trks.fast.breed, "trks.fast.breed" )
+write_rds( trks_5sec, "trks_5sec" )
+
+# save complete/combined data including 5 second rate steps by burst and all 
+# other associated info found in un-resampled breeding data
+
+write_rds( trks_5sec_complete, "trks_5sec_complete" )
 
 save.image( "TracksWorkspace.RData" )
 
